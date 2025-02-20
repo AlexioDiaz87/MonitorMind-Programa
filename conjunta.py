@@ -70,7 +70,7 @@ class MonitorMindApp:
             
         )
         instrucciones_label = tk.Label(
-            self.root, text=instrucciones_text, font=("Milky Vintage", 15), bg="black", fg="white", wraplength=400, justify="left"
+            self.root, text=instrucciones_text, font=("Milky Vintage", 16), bg="black", fg="white", wraplength=400, justify="left"
         )
         instrucciones_label.place(relx=0.1, rely=0.45, anchor="w")  # Ajusta la posición según sea necesario
 
@@ -145,33 +145,17 @@ class MonitorMindApp:
 
     def prepare_activity_text(self):
         full_text = (
-            "Sobre una columna muy alta, dominando toda la ciudad, se alzaba la estatua del Príncipe Feliz. "
-            "Estaba recubierta de oro fino y sus ojos eran dos grandes zafiros. "
-            "Una noche de invierno llegó a la ciudad una golondrina y se refugió a los pies de la estatua. "
-            "Cuando metía la cabeza bajo el ala, le cayó una gota de agua. "
-            "- ¡Qué raro!, pensó, No hay nubes en el cielo, y sin embargo, llueve. "
-            "Cayó una segunda gota y luego otra. La golondrina miró hacia arriba y vio que por las doradas mejillas del Príncipe rodaban gruesas lágrimas."
-            "- ¿Por qué lloras?, le preguntó."
-            "- Cuando estaba vivo, dijo la estatua, todo lo que veía en mi palacio era hermoso y alegre, por eso me llamaban el Príncipe Feliz. Pero ahora que ya no estoy vivo y me han colocado en este lugar tan alto, puedo ver la pobreza que hay en la ciudad y no puedo evitar llorar."
-            "- ¿Y qué es lo que ves ahora?, preguntó la golondrina."
-            "- Una casa muy pobre. Dentro hay una mujer bordando, y en un rincón está su hijo enfermo y hambriento. Pero la pobre, no tiene alimento que darle. Golondrina, ¿podrías llevarle el rubí de mi espada? Yo no puedo moverme de aquí."
-            "Aunque hacía mucho frío, la golondrina aceptó y arrancando el rubí, salió volando con él en el pico. Llegó a la casa de la costurera, depositó el rubí sobre la caja de la costura de la mujer y abanicó la frente del niño con sus alas."
-            "La golondrina volvió con el Príncipe Feliz y allí pasó la noche. Al día siguiente, le dijo al Príncipe."
-            "- ¡Adiós! Mis compañeras me esperan para emigrar al sur."
-            "- Por favor, golondrina, quédate, - le pidió el príncipe. Allá en una buhardilla veo a un joven escribiendo una obra de teatro para los niños. No tiene qué comer y se ha desmayado de hambre."
-            "- Vale, me quedaré. ¿Qué debo llevarle?"
-            "- El zafiro de uno de mis ojos, respondió el príncipe."
-            "La golondrina, con gran pesar, le arrancó el rubí del ojo al Príncipe y se fue volando a la buhardilla. Cuando el escritor volvió en sí, exclamó: "
-            "- ¡Oh, debe ser un regalo de algún admirador! Por fin podré terminar mi obra."
-            "Al día siguiente la golondrina quiso marcharse a tierras más cálidas, el invierno estaba cerca, pero el Príncipe volvió a pedirle un favor más para ayudar a una niña muy pobre que vendía cerillas en una plaza. "
-            "- ¡Quítame el rubí del otro ojo! Me quedaré ciego pero la niña tendrá con qué calentarse."
-            "La golondrina accedió al deseo del Príncipe y se lo llevó a la niña que corrió emocionada a entregárselo a su madre. "
-            "Al regresar junto al Príncipe, la generosa golondrina, le dijo al generoso Príncipe: "
-            "- Ahora que estás ciego, no podré abandonarte. Volaré por la ciudad y te contré lo que vea."
-            "- Arranca el oro que me cubre y dáselo a los pobres, le pidió el príncipe."
-            "La golondrina así, repartió día tras día el oro de la estatua entre los pobres de toda la ciudad y así, llegaron las primeras nieves. La pequeña golondrina cada vez tenía más frío y procuraba calentarse batiendo las alas. Un día, sintió que iba a morir, se tumbó en el hombro del Príncipe y le dijo."
-            "- ¡Querido Prínicipe! Ya no podré ir a Egipto, voy a morir, solo quiero decirte lo mucho que te amo."
-            "La golondrina besó al príncipe y cayó muerta a sus pies. En ese mismo momento, se escuchó un crujido dentro de la estatua del príncipe. Era su corazón de plomo, partido en dos."   
+            "El bostezo es un acto que llevamos a cabo todos los seres humanos " 
+            "(y la mayor parte de los animales) desde que nacemos. La comunidad "
+            "científica todavía no ha llegado a un consenso sobre el porqué de " 
+            "los bostezos, pero si se han descrito diferentes hipótesis. La "
+            "primera, es la teoría de que bostezamos "
+            "cuando estamos cansados, aburridos o con sueño. Esta teoría defiende "
+            "que el bostezo tiene la función fisiológica de ayudar al cerebro a "
+            "mantenerse despierto en situaciones aburridas. La explicación que "
+            "aportan es que, al bostezar, estimula la arteria carótida, provocando un "
+            "aumento de la frecuencia cardiaca. "
+               
         )
         self.total_letters = {
             "A": sum(1 for char in full_text if char.upper() == "A"),
@@ -181,7 +165,46 @@ class MonitorMindApp:
         return textwrap.wrap(full_text, width=30)
 
     def start_detection(self):
-        messagebox.showinfo("Advertencia", "Asegúrese de estar en un lugar bien iluminado.")
+        # Crear la ventana de instrucciones
+        ventana_instruccion = tk.Toplevel()
+        ventana_instruccion.title("Advertencia")
+        ventana_instruccion.geometry("300x200+{}+{}".format(
+            (ventana_instruccion.winfo_screenwidth() - 300) // 2,
+            (ventana_instruccion.winfo_screenheight() - 200) // 2
+        ))
+        ventana_instruccion.configure(bg="#D8A0FF")
+
+        # Título "MONITORMIND"
+        titulo = tk.Label(
+            ventana_instruccion, text="MonitorMind",
+            font=("Hello Valentica", 30, "bold"),
+            fg="black", bg="#D8A0FF"
+        )
+        titulo.pack(pady=0)
+
+        # Etiqueta con el mensaje de advertencia
+        label = tk.Label(
+            ventana_instruccion, 
+            text="Asegúrese de estar en un lugar bien iluminado.",
+            font=("Milky Vintage", 14), 
+            fg="black", bg="#D8A0FF",
+            wraplength=280  # Ajusta el ancho máximo antes de hacer un salto de línea
+        )
+        label.pack(pady=20)
+
+        # Botón para cerrar la ventana
+        boton = tk.Button(
+            ventana_instruccion, text="Aceptar",
+            command=ventana_instruccion.destroy,
+            font=("Milky Vintage", 15),
+            bg="#B547FF", fg="black",
+            width=15, height=1, relief="flat"
+        )
+        boton.place(relx=0.5, rely=0.8, anchor="center")
+
+        # Esperar a que la ventana se cierre antes de ejecutar `conjunta.py`
+        ventana_instruccion.wait_window()
+        
         if not self.camera_active:
             self.camera_active = True
             self.cap = cv2.VideoCapture(0)
@@ -215,11 +238,11 @@ class MonitorMindApp:
         seconds = int(elapsed_time % 60)
         self.timer_label.config(text=f"Tiempo: {minutes:02d}:{seconds:02d}")
 
-        if elapsed_time >= 300:  # 5 minutos
+        if elapsed_time >= 180:  # 3 minutos
             self.stop_detection()
-            messagebox.showinfo("Finalizado", "La detección ha terminado después de 5 minutos.")
+            messagebox.showinfo("Finalizado", "La detección ha terminado después de 3 minutos.")
         else:
-            self.root.after(1000, self.update_timer)
+            self.root.after(400, self.update_timer)
 
     def calculate_results(self):
         # Calcular tiempo empleado
@@ -232,9 +255,17 @@ class MonitorMindApp:
         seleccionadas_r = self.selected_letters.get("R", 0)
         errores = self.errors
         bostezos = self.yawn_count  # Número de bostezos detectados durante la actividad
+        selecionTotal = seleccionadas_a + seleccionadas_e + seleccionadas_r
+        omisiones= 157 - selecionTotal
 
+        # Calcular porcentaje de fatiga con la nueva fórmula
+        fatiga_errores = ((errores + omisiones) / 157) * 40
+        fatiga_bostezos = (bostezos / 3) * 60
+        
+        porcentaje_fatiga = min(fatiga_errores + fatiga_bostezos, 100)  # Máximo 100%
+        
         # Guardar resultados en resultados2.txt
-        resultados2.guardar_resultados(tiempo_ms, seleccionadas_a, seleccionadas_e, seleccionadas_r, errores, bostezos)
+        resultados2.guardar_resultados(tiempo_ms, seleccionadas_a, seleccionadas_e, seleccionadas_r, errores, bostezos, selecionTotal, omisiones, porcentaje_fatiga )
 
         # Mostrar mensaje final con los resultados
         resultados_texto = (
@@ -242,11 +273,56 @@ class MonitorMindApp:
             f"Letras 'A' seleccionadas: {seleccionadas_a}\n"
             f"Letras 'E' seleccionadas: {seleccionadas_e}\n"
             f"Letras 'R' seleccionadas: {seleccionadas_r}\n"
+            f"Letras correctas seleccionadas: {selecionTotal}\n"
             f"Letras incorrectas seleccionadas: {errores}\n"
+            f"Letras omitidas: {omisiones}\n"
             f"Bostezos detectados: {bostezos}\n"
+            f"Porcentaje de fatiga: {porcentaje_fatiga:.2f}%\n"
+            
         )
+        
+        # Crear la ventana de instrucciones
+        ventana_instruccion = tk.Toplevel()
+        ventana_instruccion.title("Resultados")
+        ventana_instruccion.geometry("300x310+{}+{}".format(
+            (ventana_instruccion.winfo_screenwidth() - 300) // 2,
+            (ventana_instruccion.winfo_screenheight() - 200) // 2
+        ))
+        ventana_instruccion.configure(bg="#D8A0FF")
 
-        messagebox.showinfo("Resultados", resultados_texto)
+        # Título "MONITORMIND"
+        titulo = tk.Label(
+            ventana_instruccion, text="MonitorMind",
+            font=("Hello Valentica", 30, "bold"),
+            fg="black", bg="#D8A0FF"
+        )
+        titulo.pack(pady=0)
+
+        # Etiqueta con el mensaje de advertencia
+        label = tk.Label(
+            ventana_instruccion, 
+            text=resultados_texto,
+            font=("Milky Vintage", 14), 
+            fg="black", bg="#D8A0FF",
+            wraplength=280  # Ajusta el ancho máximo antes de hacer un salto de línea
+        )
+        label.pack(pady=20)
+
+        # Botón para cerrar la ventana
+        boton = tk.Button(
+            ventana_instruccion, text="Aceptar",
+            command=ventana_instruccion.destroy,
+            font=("Milky Vintage", 15),
+            bg="#B547FF", fg="black",
+            width=15, height=1, relief="flat"
+        )
+        boton.place(relx=0.5, rely=0.8, anchor="center")
+        ventana_instruccion.wait_window()
+        return porcentaje_fatiga
+
+        
+
+
 
     def stop_detection(self):
         self.timer_running = False
@@ -272,9 +348,10 @@ class MonitorMindApp:
         if self.cap and self.camera_active:
             ret, frame = self.cap.read()
             if ret:
+                print("Frame capturado")  # Mensaje de depuración
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 faces = self.detector(gray)
-                
+
                 for face in faces:
                     landmarks = self.predictor(gray, face)
                     mar = self.calculate_mar(landmarks)
@@ -283,20 +360,32 @@ class MonitorMindApp:
                         if not self.bostezo_detectado:
                             self.yawn_count += 1  # Incrementa el contador solo una vez por bostezo
                             self.bostezo_detectado = True  # Marca que un bostezo fue detectado
+
                     else:
                         self.bostezo_detectado = False  # Se reinicia cuando la boca se cierra
 
+                    # Dibujar puntos faciales
                     for n in range(48, 68):
                         x, y = landmarks.part(n).x, landmarks.part(n).y
                         cv2.circle(frame, (x, y), 2, (0, 255, 0), -1)
 
+                # Mostrar el texto "BOSTEZO DETECTADO" en el video
+                if self.bostezo_detectado:
+                    cv2.putText(frame, "BOSTEZO DETECTADO", (50, 50), 
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3, cv2.LINE_AA)
+
+                # Convertir frame para mostrar en la interfaz
                 frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 img = Image.fromarray(frame_rgb)
                 self.img_tk = ImageTk.PhotoImage(image=img)
                 self.canvas.create_image(0, 0, image=self.img_tk, anchor="nw")
 
+            else:
+                print("No se pudo capturar el frame")  # Mensaje de depuración
+
         if self.camera_active:
-            self.root.after(10, self.update_frame)
+            self.root.after(30, self.update_frame)  # Aumentar el tiempo de espera
+
 
     def calculate_mar(self, landmarks):
         top_lip = np.mean([landmarks.part(i).y for i in range(50, 53)])
@@ -324,17 +413,19 @@ class MonitorMindApp:
     def regresar(self):
         self.stop_detection()  # Detener cualquier proceso activo
         self.root.destroy()  # Cerrar la ventana actual
-    try:
-        subprocess.run(["python", "seleccionarActividad.py"])  # Ejecutar el script de la otra interfaz
-    except FileNotFoundError:
-        messagebox.showerror("Error", "No se encontró el archivo 'seleccionarActividad.py'")
+        
+        try:
+            subprocess.run(["python", "seleccionarActividad.py"])  # Ejecutar el script de la otra interfaz
+        except FileNotFoundError:
+            messagebox.showerror("Error", "No se encontró el archivo 'seleccionarActividad.py'")
+
 
     def display_text_interactive(self, line):
         for widget in self.text_frame.winfo_children():
             widget.destroy()
 
         for char in line:
-            label = tk.Label(self.text_frame, text=char, font=("Arial", 16), bg="black", fg="white")
+            label = tk.Label(self.text_frame, text=char, font=("Milky Vintage", 20), bg="white", fg="black")
             if char.upper() in ["A", "E", "R"]:
                 label.bind("<Button-1>", lambda event, c=char.upper(), l=label: self.select_letter(c, l, True))
             else:
@@ -348,10 +439,6 @@ class MonitorMindApp:
         else:
             label.config(fg="red")  # Marca el error
             self.errors += 1
-
-    
-        
-    
 
 
 if __name__ == "__main__":

@@ -108,12 +108,12 @@ def abrir_sobre_nosotros():
 def continuar():
     ventana.destroy()
     try:
-        ruta_interfaz1 = os.path.join(directorio_actual, "interfaz1.py")
+        ruta_interfaz1 = os.path.join(directorio_actual, "login.py")
         subprocess.run(["python", ruta_interfaz1])
     except FileNotFoundError as e:
-        print(f"Error: No se encontró el archivo 'interfaz1.py': {e}")
+        print(f"Error: No se encontró el archivo 'login.py': {e}")
     except Exception as e:
-        print(f"Error al ejecutar 'interfaz1.py': {e}")
+        print(f"Error al ejecutar 'login.py': {e}")
 
 # Sección de botones
 frame_botones = tk.Frame(ventana, bg="#add8e6")
