@@ -4,6 +4,8 @@ import subprocess
 import random
 import time
 from tkinter import messagebox
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas as pdf_canvas  # Cambiar el alias a pdf_canvas
 import os
 import resultados1
 
@@ -73,6 +75,40 @@ canvas.place(relx=0.5, rely=0.9, anchor="center")
 
 # Crear el rectángulo que representará la barra de carga
 barra_carga_rect = canvas.create_rectangle(0, 0, 0, 30, fill="#D8A0FF")  # Color lila
+
+# Función para generar el PDF con los resultados
+def generar_pdf():
+    # Nombre del archivo de salida
+    nombre_pdf = "resultados.pdf"
+
+    try:
+        with open("resultados.txt", "r") as archivo:
+            resultados_texto = archivo.readlines()
+    except FileNotFoundError:
+        messagebox.showerror("Error", "No se encontró el archivo de resultados.")
+        return
+
+    # Crear el archivo PDF usando el alias pdf_canvas
+    c = pdf_canvas.Canvas(nombre_pdf, pagesize=letter)
+    width, height = letter
+
+    # Título del PDF
+    c.setFont("Helvetica-Bold", 18)
+    c.drawString(200, height - 50, "Resultados del Test")
+
+    # Dibujar los resultados en el PDF
+    c.setFont("Helvetica", 14)
+    y_position = height - 100  # Posición inicial en la página
+
+    for linea in resultados_texto:
+        c.drawString(100, y_position, linea.strip())
+        y_position -= 20  # Espaciado entre líneas
+
+    # Guardar el PDF
+    c.save()
+
+    # Mostrar un mensaje de confirmación
+    messagebox.showinfo("PDF Generado", f"Resultados guardados en {nombre_pdf}")
 
 # Función para simular el progreso de la barra de carga
 def cargar():
@@ -420,6 +456,10 @@ def mostrar_segunda_interfaz():
         )
         titulo_resultados.pack(pady=20)
 
+        # Contenedor de los resultados con un `Frame`
+        frame_resultados = tk.Frame(ventana_resultados, bg="#000000")
+        frame_resultados.pack(pady=20, padx=50, fill="both", expand=True)
+
         # Leer los resultados guardados en el archivo
         try:
             with open("resultados.txt", "r") as archivo:
@@ -427,16 +467,32 @@ def mostrar_segunda_interfaz():
         except FileNotFoundError:
             resultados_texto = "No hay resultados disponibles."
 
-        # Mostrar los resultados en un label dentro de la ventana
+        # Mostrar los resultados en un label dentro del `Frame`
         label_resultados = tk.Label(
-            ventana_resultados,
+            frame_resultados,
             text=resultados_texto,
             font=("Arial", 24),
             fg="white",
             bg="#000000",
-            justify="left"
+            justify="left",
+            wraplength=900  # Ajustar el ancho del texto para que no sea demasiado largo
         )
-        label_resultados.pack(pady=50)
+        label_resultados.pack(pady=20)
+
+        # Botón para generar el PDF (Se mantiene fijo)
+        boton_generar_pdf = tk.Button(
+            ventana_resultados,
+            text="Generar Resultados en PDF",
+            font=("Arial", 18),
+            bg="#D8A0FF",
+            fg="black",
+            command=generar_pdf
+        )
+        boton_generar_pdf.pack(pady=10)
+
+        # *** Ajuste del botón "Cerrar" para que no se mueva demasiado abajo ***
+        frame_cerrar = tk.Frame(ventana_resultados, bg="#000000")
+        frame_cerrar.pack(pady=20)  # Reducimos la separación con el botón anterior
 
         # Aquí puedes agregar más contenido, como gráficos, tablas, etc.
         # Por ejemplo, un label con un mensaje de ejemplo:
@@ -459,14 +515,14 @@ def mostrar_segunda_interfaz():
 
         # Botón para cerrar la ventana de resultados
         boton_cerrar = tk.Button(
-            ventana_resultados,
+            frame_cerrar,
             text="Cerrar",
             font=("Arial", 18),
             bg="#D8A0FF",
             fg="black",
             command=ventana_resultados.destroy
         )
-        boton_cerrar.pack(pady=20)
+        boton_cerrar.pack()
 
     # Agregar el botón de Resultados en la interfaz
     boton_resultados = tk.Button(
