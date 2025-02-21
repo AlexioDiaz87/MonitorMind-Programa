@@ -6,8 +6,6 @@ import subprocess
 # Obtén la ruta del directorio donde se encuentra el script
 directorio_actual = os.path.dirname(__file__)
 
-
-
 # Crear la ventana principal
 ventana = tk.Tk()
 ventana.title("MonitorMind")
