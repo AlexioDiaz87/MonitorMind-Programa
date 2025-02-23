@@ -9,6 +9,7 @@ import numpy as np
 import random
 import os
 import resultados3
+import json
 
 class MonitorMindApp2:
     def __init__(self, root):
@@ -393,6 +394,9 @@ class MonitorMindApp2:
         # Asegurar que el porcentaje de fatiga esté entre 0% y 100%
         porcentaje_fatiga2 = min(fatiga_errores + fatiga_bostezos, 100)
 
+        # ✅ Guardar en un archivo JSON
+        with open("fatiga2.json", "w") as file:
+            json.dump({"porcentaje_fatiga2": porcentaje_fatiga2}, file)
 
         # Guardar resultados en resultados3.txt
         resultados3.guardar_resultados(tiempo_ms, triangulos_seleccionados, errores_seleccionados, bostezos, avg_reaction_time, omisiones_triángulo, porcentaje_fatiga2)

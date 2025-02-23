@@ -21,6 +21,4 @@ def guardar_resultados(tiempo_ms, seleccionadas_a, seleccionadas_e, seleccionada
         archivo.write(f"Bostezos detectados: {bostezos}\n")  # Agregar bostezos detectados
         archivo.write(f"Porcentaje de fatiga: {porcentaje_fatiga:.2f}%\n")
 
-               
-
     print("Resultados guardados en 'resultados2.txt'.")

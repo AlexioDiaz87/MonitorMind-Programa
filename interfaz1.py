@@ -10,6 +10,7 @@ from reportlab.pdfgen import canvas as pdf_canvas
 from datetime import datetime
 import os
 import resultados1
+import json
 
 # Crear la ventana principal
 ventana = tk.Tk()
@@ -431,6 +432,11 @@ def mostrar_segunda_interfaz():
                 # Calcular el porcentaje de capacidad perceptiva
                 capacidad_perceptiva = resultados1.calcular_capacidad_perceptiva(aciertos_total, errores_total, omisiones_total)
 
+
+                # ✅ Guardar `capacidad_perceptiva` en un archivo JSON
+                with open("capacidad_perceptiva.json", "w") as file:
+                    json.dump({"capacidad_perceptiva": capacidad_perceptiva}, file)
+
                 # Guardar los resultados en la base de datos
                 guardar_resultados_bd(aciertos_total, errores_total, omisiones_total, igap, capacidad_perceptiva, tiempo_total)
 
@@ -534,6 +540,32 @@ def mostrar_segunda_interfaz():
         return resultado
 
     # Botón Resultados
+
+
+    def obtener_porcentaje_fatiga():
+        try:
+            with open("fatiga.json", "r") as file:
+                data = json.load(file)
+            return data.get("porcentaje_fatiga", 0)  # Devuelve 0 si no existe
+        except FileNotFoundError:
+            return 0  # Si no hay archivo, usa un valor por defecto
+        
+    def obtener_porcentaje_fatiga2():
+        try:
+            with open("fatiga2.json", "r") as file:
+                data = json.load(file)
+            return data.get("porcentaje_fatiga2", 0)  # Devuelve 0 si no existe
+        except FileNotFoundError:
+            return 0  # Si no hay archivo, usa un valor por defecto
+        
+    def obtener_capacidad_perceptiva():
+        try:
+            with open("capacidad_perceptiva.json", "r") as file:
+                data = json.load(file)
+            return data.get("capacidad_perceptiva", 0)  # Devuelve 0 si no existe
+        except FileNotFoundError:
+            return 0  # Si no hay archivo, usa un valor por defecto
+    
     def abrir_resultados():
         # Crear una nueva ventana para mostrar los resultados
         ventana_resultados = tk.Toplevel(ventana)
@@ -565,7 +597,17 @@ def mostrar_segunda_interfaz():
             )
             label_resultados.pack(pady=20)
         else:
-            print(resultado)  # Verifica en la consola qué datos está obteniendo
+            FA1 = obtener_porcentaje_fatiga()  # ✅ Obtener el valor desde el JSON
+            FA2 = obtener_porcentaje_fatiga2()  # ✅ Obtener el porcentaje de fatiga de la actividad 2
+            CAP = obtener_capacidad_perceptiva()  # ✅ Obtener capacidad perceptiva desde JSON
+
+            # Definir otras variables necesarias para la fórmula
+            W1 = 0.34
+            W2 = 0.34
+            W3 = 0.33
+
+            # ✅ Calcular la ecuación con `FA1`
+            resultado_formula = ((W1 * FA1) + (W2 * FA2) + (100 - CAP) * W3) / (W1 + W2 + W3)
 
             resultado_texto = (
                 f"Tiempo Total: {resultado[1]:.2f} segundos\n"
@@ -574,6 +616,7 @@ def mostrar_segunda_interfaz():
                 f"Omisiones: {resultado[4]}\n"
                 f"IGAP: {resultado[5]}\n"
                 f"Capacidad Perceptiva: {resultado[6]}%\n"
+                f"Resultado general de fatiga: {resultado_formula:.2f}%\n"
                 "-----------------------------------"
             )
 

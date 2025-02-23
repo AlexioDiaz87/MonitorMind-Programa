@@ -19,5 +19,4 @@ def guardar_resultados(tiempo_ms, triangulos_seleccionados, errores_seleccionado
         archivo.write(f"Bostezos detectados: {bostezos}\n")  # Guardar bostezos detectados
         archivo.write(f"Porcentaje de fatiga: {porcentaje_fatiga:.2f}%\n")
 
-       
     print("Resultados guardados en 'resultados3.txt'.")

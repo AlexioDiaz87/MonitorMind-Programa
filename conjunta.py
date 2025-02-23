@@ -9,6 +9,7 @@ import subprocess
 import numpy as np
 import os
 import resultados2
+import json
 
 
 class MonitorMindApp:
@@ -263,6 +264,10 @@ class MonitorMindApp:
         fatiga_bostezos = (bostezos / 3) * 60
         
         porcentaje_fatiga = min(fatiga_errores + fatiga_bostezos, 100)  # Máximo 100%
+
+        # Guardar el porcentaje de fatiga en un archivo JSON
+        with open("fatiga.json", "w") as file:
+            json.dump({"porcentaje_fatiga": porcentaje_fatiga}, file)
         
         # Guardar resultados en resultados2.txt
         resultados2.guardar_resultados(tiempo_ms, seleccionadas_a, seleccionadas_e, seleccionadas_r, errores, bostezos, selecionTotal, omisiones, porcentaje_fatiga )
