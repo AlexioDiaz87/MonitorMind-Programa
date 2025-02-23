@@ -616,6 +616,8 @@ def mostrar_segunda_interfaz():
                 f"Omisiones: {resultado[4]}\n"
                 f"IGAP: {resultado[5]}\n"
                 f"Capacidad Perceptiva: {resultado[6]}%\n"
+                f"FA1 (Fatiga Actividad 1): {FA1:.2f}%\n"
+                f"FA2 (Fatiga Actividad 2): {FA2:.2f}%\n"
                 f"Resultado general de fatiga: {resultado_formula:.2f}%\n"
                 "-----------------------------------"
             )
