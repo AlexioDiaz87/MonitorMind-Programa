@@ -2,9 +2,6 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import subprocess
 from tkinter import messagebox
-import sys
-from db import guardar_resultado, cargar_sesion
-
 import os
 
 # Cargar la sesión guardada
@@ -40,8 +37,8 @@ class MainMenu:
 
         # Logo
         try:
-            ruta_logo = os.path.join(directorio_actual, "../assets/images/cerebro.png")
-            self.logo_image = Image.open(ruta_logo).resize((140, 140), Image.Resampling.LANCZOS)
+            ruta_logo = os.path.join(directorio_actual, "cerebro.png")
+            self.logo_image = Image.open(ruta_logo).resize((120, 120), Image.Resampling.LANCZOS)
             self.logo_photo = ImageTk.PhotoImage(self.logo_image)
         except FileNotFoundError:
             messagebox.showerror("Error", f"No se encontró el archivo: {ruta_logo}")
@@ -85,8 +82,8 @@ class MainMenu:
         lectura_label.pack(pady=10)
 
         try:
-            ruta_libros = os.path.join(directorio_actual, "../assets/images/libros.png")
-            libros_image = Image.open(ruta_libros).resize((350, 200), Image.Resampling.LANCZOS)
+            ruta_libros = os.path.join(directorio_actual, "libros.png")
+            libros_image = Image.open(ruta_libros).resize((250, 200), Image.Resampling.LANCZOS)
             self.libros_photo = ImageTk.PhotoImage(libros_image)
         except FileNotFoundError:
             messagebox.showerror("Error", f"No se encontró el archivo: libros.png")
@@ -120,8 +117,8 @@ class MainMenu:
         actividad2_label.pack(pady=10)
 
         try:
-            ruta_actividad2 = os.path.join(directorio_actual, "../assets/images/actividad2.png")
-            actividad2_image = Image.open(ruta_actividad2).resize((350, 200), Image.Resampling.LANCZOS)
+            ruta_actividad2 = os.path.join(directorio_actual, "actividad2.png")
+            actividad2_image = Image.open(ruta_actividad2).resize((250, 200), Image.Resampling.LANCZOS)
             self.actividad2_photo = ImageTk.PhotoImage(actividad2_image)
         except FileNotFoundError:
             messagebox.showerror("Error", f"No se encontró el archivo: actividad2.png")
