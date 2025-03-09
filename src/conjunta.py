@@ -9,7 +9,17 @@ import subprocess
 import numpy as np
 import os
 import resultados2
+import json
+import sys  
+from db import guardar_resultado, actualizar_fatiga1, cargar_sesion
 
+# Cargar la sesión guardada
+idUser_sesion = cargar_sesion()
+
+if idUser_sesion is not None:
+    idResult = guardar_resultado(idUser_sesion)
+else:
+    print("No hay usuario en sesión")
 
 class MonitorMindApp:
     def __init__(self, root):
@@ -143,33 +153,16 @@ class MonitorMindApp:
 
     def prepare_activity_text(self):
         full_text = (
-            "Sobre una columna muy alta, dominando toda la ciudad, se alzaba la estatua del Príncipe Feliz. "
-            "Estaba recubierta de oro fino y sus ojos eran dos grandes zafiros. "
-            "Una noche de invierno llegó a la ciudad una golondrina y se refugió a los pies de la estatua. "
-            "Cuando metía la cabeza bajo el ala, le cayó una gota de agua. "
-            "- ¡Qué raro!, pensó, No hay nubes en el cielo, y sin embargo, llueve. "
-            "Cayó una segunda gota y luego otra. La golondrina miró hacia arriba y vio que por las doradas mejillas del Príncipe rodaban gruesas lágrimas."
-            "- ¿Por qué lloras?, le preguntó."
-            "- Cuando estaba vivo, dijo la estatua, todo lo que veía en mi palacio era hermoso y alegre, por eso me llamaban el Príncipe Feliz. Pero ahora que ya no estoy vivo y me han colocado en este lugar tan alto, puedo ver la pobreza que hay en la ciudad y no puedo evitar llorar."
-            "- ¿Y qué es lo que ves ahora?, preguntó la golondrina."
-            "- Una casa muy pobre. Dentro hay una mujer bordando, y en un rincón está su hijo enfermo y hambriento. Pero la pobre, no tiene alimento que darle. Golondrina, ¿podrías llevarle el rubí de mi espada? Yo no puedo moverme de aquí."
-            "Aunque hacía mucho frío, la golondrina aceptó y arrancando el rubí, salió volando con él en el pico. Llegó a la casa de la costurera, depositó el rubí sobre la caja de la costura de la mujer y abanicó la frente del niño con sus alas."
-            "La golondrina volvió con el Príncipe Feliz y allí pasó la noche. Al día siguiente, le dijo al Príncipe."
-            "- ¡Adiós! Mis compañeras me esperan para emigrar al sur."
-            "- Por favor, golondrina, quédate, - le pidió el príncipe. Allá en una buhardilla veo a un joven escribiendo una obra de teatro para los niños. No tiene qué comer y se ha desmayado de hambre."
-            "- Vale, me quedaré. ¿Qué debo llevarle?"
-            "- El zafiro de uno de mis ojos, respondió el príncipe."
-            "La golondrina, con gran pesar, le arrancó el rubí del ojo al Príncipe y se fue volando a la buhardilla. Cuando el escritor volvió en sí, exclamó: "
-            "- ¡Oh, debe ser un regalo de algún admirador! Por fin podré terminar mi obra."
-            "Al día siguiente la golondrina quiso marcharse a tierras más cálidas, el invierno estaba cerca, pero el Príncipe volvió a pedirle un favor más para ayudar a una niña muy pobre que vendía cerillas en una plaza. "
-            "- ¡Quítame el rubí del otro ojo! Me quedaré ciego pero la niña tendrá con qué calentarse."
-            "La golondrina accedió al deseo del Príncipe y se lo llevó a la niña que corrió emocionada a entregárselo a su madre. "
-            "Al regresar junto al Príncipe, la generosa golondrina, le dijo al generoso Príncipe: "
-            "- Ahora que estás ciego, no podré abandonarte. Volaré por la ciudad y te contré lo que vea."
-            "- Arranca el oro que me cubre y dáselo a los pobres, le pidió el príncipe."
-            "La golondrina así, repartió día tras día el oro de la estatua entre los pobres de toda la ciudad y así, llegaron las primeras nieves. La pequeña golondrina cada vez tenía más frío y procuraba calentarse batiendo las alas. Un día, sintió que iba a morir, se tumbó en el hombro del Príncipe y le dijo."
-            "- ¡Querido Prínicipe! Ya no podré ir a Egipto, voy a morir, solo quiero decirte lo mucho que te amo."
-            "La golondrina besó al príncipe y cayó muerta a sus pies. En ese mismo momento, se escuchó un crujido dentro de la estatua del príncipe. Era su corazón de plomo, partido en dos."   
+            "El bostezo es un acto que llevamos a cabo todos los seres humanos " 
+            "(y la mayor parte de los animales) desde que nacemos. La comunidad "
+            "científica todavía no ha llegado a un consenso sobre el porqué de " 
+            "los bostezos, pero si se han descrito diferentes hipótesis. La "
+            "primera, es la teoría de que bostezamos "
+            "cuando estamos cansados, aburridos o con sueño. Esta teoría defiende "
+            "que el bostezo tiene la función fisiológica de ayudar al cerebro a "
+            "mantenerse despierto en situaciones aburridas. La explicación que "
+            "aportan es que, al bostezar, estimula la arteria carótida, provocando un "
+            "aumento de la frecuencia cardiaca. "
         )
         self.total_letters = {
             "A": sum(1 for char in full_text if char.upper() == "A"),
@@ -274,9 +267,25 @@ class MonitorMindApp:
         seleccionadas_r = self.selected_letters.get("R", 0)
         errores = self.errors
         bostezos = self.yawn_count  # Número de bostezos detectados durante la actividad
+        selecionTotal = seleccionadas_a + seleccionadas_e + seleccionadas_r
+        omisiones= 157 - selecionTotal
+
+        # Calcular porcentaje de fatiga con la nueva fórmula
+        fatiga_errores = ((errores + omisiones) / 157) * 40
+        fatiga_bostezos = (bostezos / 3) * 60
+        
+        porcentaje_fatiga1 = min(fatiga_errores + fatiga_bostezos, 100)  # Máximo 100%
+
+        idResult = guardar_resultado(idUser_sesion)
+        actualizar_fatiga1(idResult, porcentaje_fatiga1)
+        
+
+        # Guardar el porcentaje de fatiga en un archivo JSON
+        with open("fatiga.json", "w") as file:
+            json.dump({"porcentaje_fatiga": porcentaje_fatiga1}, file)
 
         # Guardar resultados en resultados2.txt
-        resultados2.guardar_resultados(tiempo_ms, seleccionadas_a, seleccionadas_e, seleccionadas_r, errores, bostezos)
+        resultados2.guardar_resultados(tiempo_ms, seleccionadas_a, seleccionadas_e, seleccionadas_r, errores, bostezos, selecionTotal, omisiones, porcentaje_fatiga1 )
 
         # Mostrar mensaje final con los resultados
         resultados_texto = (
@@ -288,9 +297,50 @@ class MonitorMindApp:
             f"Letras incorrectas seleccionadas: {errores}\n"
             f"Letras omitidas: {omisiones}\n"
             f"Bostezos detectados: {bostezos}\n"
+            f"Porcentaje de fatiga: {porcentaje_fatiga1:.2f}%\n"
+            
         )
+        
+        # Crear la ventana de instrucciones
+        ventana_instruccion = tk.Toplevel()
+        ventana_instruccion.title("Resultados")
+        ventana_instruccion.geometry("300x310+{}+{}".format(
+            (ventana_instruccion.winfo_screenwidth() - 300) // 2,
+            (ventana_instruccion.winfo_screenheight() - 200) // 2
+        ))
+        ventana_instruccion.configure(bg="#D8A0FF")
 
-        messagebox.showinfo("Resultados", resultados_texto)
+        # Título "MONITORMIND"
+        titulo = tk.Label(
+            ventana_instruccion, text="MonitorMind",
+            font=("Hello Valentica", 30, "bold"),
+            fg="black", bg="#D8A0FF"
+        )
+        titulo.pack(pady=0)
+
+        # Etiqueta con el mensaje de advertencia
+        label = tk.Label(
+            ventana_instruccion, 
+            text=resultados_texto,
+            font=("Milky Vintage", 14), 
+            fg="black", bg="#D8A0FF",
+            wraplength=280  # Ajusta el ancho máximo antes de hacer un salto de línea
+        )
+        label.pack(pady=20)
+
+        # Botón para cerrar la ventana
+        boton = tk.Button(
+            ventana_instruccion, text="Aceptar",
+            command=ventana_instruccion.destroy,
+            font=("Milky Vintage", 15),
+            bg="#B547FF", fg="black",
+            width=15, height=1, relief="flat"
+        )
+        boton.place(relx=0.5, rely=0.8, anchor="center")
+        ventana_instruccion.wait_window()
+        return porcentaje_fatiga1
+    
+    
 
     def stop_detection(self):
         self.timer_running = False

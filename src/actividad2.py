@@ -9,6 +9,17 @@ import numpy as np
 import random
 import os
 import resultados3
+import json
+import sys
+from db import guardar_resultado, actualizar_fatiga2, cargar_sesion
+
+# Cargar la sesión guardada
+idUser_sesion = cargar_sesion()
+
+if idUser_sesion is not None:
+    idResult = guardar_resultado(idUser_sesion)
+else:
+    print("No hay usuario en sesión")
 
 class MonitorMindApp2:
     def __init__(self, root):
@@ -283,9 +294,12 @@ class MonitorMindApp2:
         return vertical_distance / horizontal_distance
 
     def regresar(self):
-        self.stop_detection()  # Detener cualquier proceso activo
-        self.root.destroy()  # Cerrar la ventana actual
-        subprocess.run(["python", "seleccionarActividad.py"])  # Ejecutar el script de la otra interfaz
+        try:
+            self.stop_detection()  # Detener cualquier proceso activo
+            self.root.destroy()  # Cerrar la ventana actual
+            subprocess.run(["python", "C:/Users/User/Downloads/MonitorMind-Programa-main/MonitorMind-Programa-main/src/seleccionarActividad.py"])  # Ejecutar el script de la otra interfaz
+        except Exception as e:
+            print(f"Error al regresar: {e}")  # Imprimir el error en la consola
         
     def start_activity(self):
         self.triangle_count = 0
@@ -363,7 +377,12 @@ class MonitorMindApp2:
         self.activity_canvas.itemconfig(triangle_id, fill="#5BDE44")
 
 
-    def calculate_results(self):
+    def calculate_results2(self):
+
+        if idUser_sesion is None:
+            messagebox.showerror("Error", "No se pudo identificar al usuario")
+            return
+
         # Calcular tiempo empleado
         tiempo_fin = time.time()
         tiempo_ms = resultados3.calcular_tiempo_transcurrido(self.start_time, tiempo_fin)
@@ -381,6 +400,21 @@ class MonitorMindApp2:
         triangulos_seleccionados = self.correct_clicks  # Triángulos correctamente seleccionados
         errores_seleccionados = self.incorrect_clicks  # Figuras erróneas seleccionadas
         bostezos = self.yawn_count  # Número de bostezos detectados
+        triangulos= omisiones_triángulo + triangulos_seleccionados
+
+        # Cálculo del porcentaje de fatiga
+        fatiga_errores = ((errores_seleccionados + omisiones_triángulo) / triangulos) *40
+        fatiga_bostezos = (bostezos / 5) * 60
+
+        # Asegurar que el porcentaje de fatiga esté entre 0% y 100%
+        porcentaje_fatiga2 = min(fatiga_errores + fatiga_bostezos, 100)
+
+        idResult = guardar_resultado(idUser_sesion)
+        actualizar_fatiga2(idResult, porcentaje_fatiga2)
+
+        # ✅ Guardar en un archivo JSON
+        with open("fatiga2.json", "w") as file:
+            json.dump({"porcentaje_fatiga2": porcentaje_fatiga2}, file)
 
         # Guardar resultados en resultados3.txt
         resultados3.guardar_resultados(tiempo_ms, triangulos_seleccionados, errores_seleccionados, bostezos, avg_reaction_time, omisiones_triángulo, porcentaje_fatiga2)
