@@ -1,0 +1,7 @@
+Pillow
+psycopg
+psycopg2
+psycopg-binary
+bcrypt
+reportlab
+dlib

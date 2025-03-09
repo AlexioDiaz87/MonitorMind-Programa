@@ -39,7 +39,7 @@ frame_cerebro = tk.Frame(ventana, bg="#add8e6")
 frame_cerebro.place(relx=0.5, rely=0.6, anchor="center")
 
 try:
-    ruta_cerebro = os.path.join(directorio_actual, "cerebro.png")
+    ruta_cerebro = os.path.join(directorio_actual, "../assets/images/cerebro.png")
     cerebro_imagen = Image.open(ruta_cerebro).resize((250, 250), Image.Resampling.LANCZOS)
     cerebro_tk = ImageTk.PhotoImage(cerebro_imagen)
     cerebro_label = tk.Label(frame_cerebro, image=cerebro_tk, bg="#add8e6")
@@ -54,7 +54,7 @@ def abrir_sobre_nosotros():
     ventana_sobre.configure(bg="#add8e6")
 
     try:
-        ruta_cerebro = os.path.join(directorio_actual, "cerebro.png")
+        ruta_cerebro = os.path.join(directorio_actual, "../assets/images/cerebro.png")
         cerebro_image = Image.open(ruta_cerebro).resize((100, 100), Image.Resampling.LANCZOS)
         cerebro_photo = ImageTk.PhotoImage(cerebro_image)
 
@@ -108,12 +108,12 @@ def abrir_sobre_nosotros():
 def continuar():
     ventana.destroy()
     try:
-        ruta_interfaz1 = os.path.join(directorio_actual, "interfaz1.py")
+        ruta_interfaz1 = os.path.join(directorio_actual, "login.py")
         subprocess.run(["python", ruta_interfaz1])
     except FileNotFoundError as e:
-        print(f"Error: No se encontró el archivo 'interfaz1.py': {e}")
+        print(f"Error: No se encontró el archivo 'login.py': {e}")
     except Exception as e:
-        print(f"Error al ejecutar 'interfaz1.py': {e}")
+        print(f"Error al ejecutar 'login.py': {e}")
 
 # Sección de botones
 frame_botones = tk.Frame(ventana, bg="#add8e6")
@@ -161,9 +161,9 @@ frame_redes.pack(side="top", pady=5)
 
 try:
     # Construye las rutas de las imágenes de redes sociales
-    ruta_imagen1 = os.path.join(directorio_actual, "imagen1.png")
-    ruta_imagen2 = os.path.join(directorio_actual, "imagen2.jpg")
-    ruta_imagen3 = os.path.join(directorio_actual, "imagen3.jpg")
+    ruta_imagen1 = os.path.join(directorio_actual, "../assets/images/imagen1.png")
+    ruta_imagen2 = os.path.join(directorio_actual, "../assets/images/imagen2.jpg")
+    ruta_imagen3 = os.path.join(directorio_actual, "../assets/images/imagen3.jpg")
     
     # Carga las imágenes
     imagen1 = ImageTk.PhotoImage(Image.open(ruta_imagen1).resize((30, 30), Image.Resampling.LANCZOS))
